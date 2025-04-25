@@ -24,58 +24,36 @@ using namespace std;
 class Token
 {
 public:
-    int tag;
+    Tag tag;
     string lexeme;
-    Token(int tag, string lexeme) : tag(tag), lexeme(lexeme) {}
+    Token(Tag tag, string lexeme) : tag(tag), lexeme(lexeme) {}
     virtual ~Token() {}
     virtual string toString() const
     {
-        switch (tag)
-        {
-        case LPAREN:
-            return "LPAREN";
-        case RPAREN:
-            return "RPAREN";
-        case LBRACE:
-            return "LBRACE";
-        case RBRACE:
-            return "RBRACE";
-        case COMMA:
-            return "COMMA";
-        case SEMICOLON:
-            return "SEMICOLON";
-        case ASSIGN:
-            return "ASSIGN";
-        default:
-            return "TOKEN";
-        }
+        return TagNames.at(tag);
     }
 };
 
 class Word : public Token
 {
 public:
-    Word(int tag, const string lexeme) : Token(tag, lexeme) {}
+    Word(Tag tag, const string lexeme) : Token(tag, lexeme) {}
     string toString() const override
     {
         switch (tag)
         {
-        case DEF:
-            return "DEF";
-        case INT:
-            return "INT";
-        case IF:
-            return "IF";
-        case ELSE:
-            return "ELSE";
-        case PRINT:
-            return "PRINT";
-        case RETURN:
-            return "RETURN";
         case ID:
             return "ID(" + lexeme + ")";
+            break;
+        case DEF:
+        case INT:
+        case IF:
+        case ELSE:
+        case PRINT:
+        case RETURN:
         default:
-            return "WORD";
+            return TagNames.at(tag);
+            break;
         }
     }
 };
@@ -87,67 +65,29 @@ public:
     Num(int value) : Token(NUM, to_string(value)), value(value) {}
     string toString() const override
     {
-        return "NUM(" + lexeme + ")";
+        return TagNames.at(tag) + "(" + to_string(value) + ")";
     }
 };
 
 class Relop : public Token
 {
 public:
-    int relop;
-    Relop(int tag, string lexeme, int type) : Token(tag, lexeme), relop(type) {}
-    string toString() const override
-    {
-        switch (relop)
-        {
-        case LE:
-            return "LE";
-        case GE:
-            return "GE";
-        case EQ:
-            return "EQ";
-        case NE:
-            return "NE";
-        case LT:
-            return "LT";
-        case GT:    
-            return "GT";
-        default:
-            return "RELOP";
-        }
-    }
+    Tag relop;
+    Relop(Tag tag, string lexeme, Tag type) : Token(tag, lexeme), relop(type) {}
 };
 
 class Arithop : public Token
 {
 public:
-    int arithop;
-    Arithop(int tag, string lexeme, int type) : Token(tag, lexeme), arithop(type) {}
-    string toString() const override
-    {
-        switch (arithop)
-        {
-        case PLUS:
-            return "PLUS";
-        case MINUS:
-            return "MINUS";
-        case TIMES:
-            return "TIMES";
-        case DIVIDE:
-            return "DIVIDE";
-        case ASSIGN:
-            return "ASSIGN";
-        default:
-            return "ARITHOP";
-        }
-    }
+    Tag arithop;
+    Arithop(Tag tag, string lexeme, Tag type) : Token(tag, lexeme), arithop(type) {}
 };
 
 class Unknown : public Token
 {
 public:
     int line, column;
-    Unknown(int tag, const string lexeme, int line, int column) : Token(tag, lexeme), line(line), column(column) {}
+    Unknown(Tag tag, const string lexeme, int line, int column) : Token(tag, lexeme), line(line), column(column) {}
     string toString() const override
     {
         return "UNKNOWN(" + lexeme + ") at line " + to_string(line) + ", column " + to_string(column);

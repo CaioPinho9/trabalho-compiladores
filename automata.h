@@ -66,6 +66,42 @@ enum Tag
     NUM,
     UNK
 };
+enum TokenType
+{
+    KEYWORD,
+    SYMBOL
+};
+
+const unordered_map<Tag, string> TagNames = {
+    {RELOP, "RELOP"},
+    {ARITHOP, "ARITHOP"},
+    {IF, "IF"},
+    {ELSE, "ELSE"},
+    {DEF, "DEF"},
+    {PRINT, "PRINT"},
+    {RETURN, "RETURN"},
+    {INT, "INT"},
+    {PLUS, "PLUS"},
+    {MINUS, "MINUS"},
+    {TIMES, "TIMES"},
+    {DIVIDE, "DIVIDE"},
+    {LPAREN, "LPAREN"},
+    {RPAREN, "RPAREN"},
+    {LBRACE, "LBRACE"},
+    {RBRACE, "RBRACE"},
+    {COMMA, "COMMA"},
+    {SEMICOLON, "SEMICOLON"},
+    {LE, "LE"},
+    {GE, "GE"},
+    {NE, "NE"},
+    {EQ, "EQ"},
+    {LT, "LT"},
+    {GT, "GT"},
+    {ASSIGN, "ASSIGN"},
+    {ID, "ID"},
+    {NUM, "NUM"},
+    {UNK, "UNK"}
+};
 
 // ==========================
 // Definição dos autômatos
