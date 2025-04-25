@@ -88,8 +88,8 @@ int testAutomata()
         {"/", DIVIDE, true},
         {"//", DIVIDE, false},
 
-        {"=", EQUALS, true},
-        {"==", EQUALS, false},
+        {"=", ASSIGN, true},
+        {"==", ASSIGN, false},
 
         {"(", LPAREN, true},
         {"((", LPAREN, false},
@@ -124,7 +124,7 @@ int testAutomata()
 
         {"<", LT, true},
         {"<<", LT, false},
-        
+
         {">", GT, true},
         {">>", GT, false},
     };

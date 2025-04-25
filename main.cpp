@@ -33,21 +33,21 @@ public:
         switch (tag)
         {
         case LPAREN:
-            return "LPAREN: " + lexeme;
+            return "LPAREN";
         case RPAREN:
-            return "RPAREN: " + lexeme;
+            return "RPAREN";
         case LBRACE:
-            return "LBRACE: " + lexeme;
+            return "LBRACE";
         case RBRACE:
-            return "RBRACE: " + lexeme;
+            return "RBRACE";
         case COMMA:
-            return "COMMA: " + lexeme;
+            return "COMMA";
         case SEMICOLON:
-            return "SEMICOLON: " + lexeme;
-        case EQUALS:
-            return "EQUALS: " + lexeme;
+            return "SEMICOLON";
+        case ASSIGN:
+            return "ASSIGN";
         default:
-            return "TOKEN: " + lexeme;
+            return "TOKEN";
         }
     }
 };
@@ -61,21 +61,21 @@ public:
         switch (tag)
         {
         case DEF:
-            return "DEF: " + lexeme;
+            return "DEF";
         case INT:
-            return "INT: " + lexeme;
+            return "INT";
         case IF:
-            return "IF: " + lexeme;
+            return "IF";
         case ELSE:
-            return "ELSE: " + lexeme;
+            return "ELSE";
         case PRINT:
-            return "PRINT: " + lexeme;
+            return "PRINT";
         case RETURN:
-            return "RETURN: " + lexeme;
+            return "RETURN";
         case ID:
-            return "ID: " + lexeme;
+            return "ID(" + lexeme + ")";
         default:
-            return "WORD: " + lexeme;
+            return "WORD";
         }
     }
 };
@@ -87,7 +87,7 @@ public:
     Num(int value) : Token(NUM, to_string(value)), value(value) {}
     string toString() const override
     {
-        return "NUM: " + lexeme;
+        return "NUM(" + lexeme + ")";
     }
 };
 
@@ -98,7 +98,23 @@ public:
     Relop(int tag, string lexeme, int type) : Token(tag, lexeme), relop(type) {}
     string toString() const override
     {
-        return "RELOP: " + lexeme;
+        switch (relop)
+        {
+        case LE:
+            return "LE";
+        case GE:
+            return "GE";
+        case EQ:
+            return "EQ";
+        case NE:
+            return "NE";
+        case LT:
+            return "LT";
+        case GT:    
+            return "GT";
+        default:
+            return "RELOP";
+        }
     }
 };
 
@@ -109,7 +125,21 @@ public:
     Arithop(int tag, string lexeme, int type) : Token(tag, lexeme), arithop(type) {}
     string toString() const override
     {
-        return "ARITHOP: " + lexeme;
+        switch (arithop)
+        {
+        case PLUS:
+            return "PLUS";
+        case MINUS:
+            return "MINUS";
+        case TIMES:
+            return "TIMES";
+        case DIVIDE:
+            return "DIVIDE";
+        case ASSIGN:
+            return "ASSIGN";
+        default:
+            return "ARITHOP";
+        }
     }
 };
 
@@ -120,7 +150,7 @@ public:
     Unknown(int tag, const string lexeme, int line, int column) : Token(tag, lexeme), line(line), column(column) {}
     string toString() const override
     {
-        return "UNKNOWN: " + lexeme + " at line " + to_string(line) + ", column " + to_string(column);
+        return "UNKNOWN(" + lexeme + ") at line " + to_string(line) + ", column " + to_string(column);
     }
 };
 
@@ -142,7 +172,7 @@ public:
         reserve(new Relop(RELOP, "!=", NE));
         reserve(new Relop(RELOP, "<", LT));
         reserve(new Relop(RELOP, ">", GT));
-        reserve(new Relop(RELOP, "=", EQUALS));
+        reserve(new Arithop(ARITHOP, "=", ASSIGN));
         reserve(new Arithop(ARITHOP, "+", PLUS));
         reserve(new Arithop(ARITHOP, "-", MINUS));
         reserve(new Arithop(ARITHOP, "*", TIMES));
@@ -276,7 +306,7 @@ private:
         case RBRACE:
         case COMMA:
         case SEMICOLON:
-        case EQUALS:
+        case ASSIGN:
             return new Token(tag, lexeme);
         case DEF:
         case IF:

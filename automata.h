@@ -61,7 +61,7 @@ enum Tag
     EQ,
     LT,
     GT,
-    EQUALS,
+    ASSIGN,
     ID,
     NUM,
     UNK
@@ -238,8 +238,8 @@ const Automata automata_divide = []
     return a;
 }();
 
-// equals
-const Automata automata_equals = []
+// assign
+const Automata automata_assign = []
 {
     Automata a(2, 1);
     a.input_symbol_index = {{'=', 0}};
@@ -389,7 +389,7 @@ const unordered_map<Tag, Automata> automatas = {
     {MINUS, automata_minus},
     {TIMES, automata_times},
     {DIVIDE, automata_divide},
-    {EQUALS, automata_equals},
+    {ASSIGN, automata_assign},
     {LT, automata_less},
     {GT, automata_greater},
     {LE, automata_less_equal},
