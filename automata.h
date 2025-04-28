@@ -72,6 +72,8 @@ enum TokenType
     SYMBOL
 };
 
+// Mapeamento de TAGs para nomes
+// Utilizado para imprimir os tokens
 const unordered_map<Tag, string> TagNames = {
     {RELOP, "RELOP"},
     {ARITHOP, "ARITHOP"},

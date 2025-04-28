@@ -15,17 +15,20 @@
 
 #include "automata.h"
 
+// Recebe um input e um automato e retorna se o input é aceito ou não
 bool run_automata(const string &input, const Automata &automata)
 {
     int estado = 0;
 
     for (char simbolo : input)
     {
+        // Verifica se o símbolo de entrada está no índice do autômato
         auto it = automata.input_symbol_index.find(simbolo);
         if (it == automata.input_symbol_index.end())
         {
             return false;
         }
+        // Usa o índice do símbolo para encontrar o proximo estado
         int idx = it->second;
         estado = automata.transition_table[estado][idx];
         if (estado == -1)
@@ -34,6 +37,7 @@ bool run_automata(const string &input, const Automata &automata)
         }
     }
 
+    // Verifica se o estado final é um estado de aceitação
     return automata.final_states.count(estado) > 0;
 }
 
