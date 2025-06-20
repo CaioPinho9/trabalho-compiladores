@@ -17,6 +17,8 @@
 - `entrada_valida.txt` → Exemplo de entrada correta (sem erros).
 - `entrada_invalida1.txt` → Exemplo de entrada com erro sintático, não pode funções dentro de funções.
 - `entrada_invalida2.txt` → Exemplo de entrada com erro sintático, não pode else if.
+- `entrada_invalida3.txt` → Exemplo de entrada com erro sintático, não pode retornar um número inteiro, apenas variavéis.
+
 - `README.md` → Este arquivo de instruções.
 
 ---

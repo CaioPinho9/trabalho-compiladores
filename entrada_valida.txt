@@ -1,21 +1,41 @@
-def Main() { 
-    int a, b, c;
-    a = 5; 
-    if (a < 10) { 
-        print(a + 1); 
-    } else { 
-        print(0); 
-    } 
-    b = 2 + 3;
-    c = Sum(a, b);
-
-    print(c);
-
-    return; 
+def Soma(int a, int b) {
+    int resultado;
+    resultado = a + b;
+    return resultado;
 }
 
-def Sum(int a, int b) {
-    int c;
-    c = a + b;
-    return c;
+def Multiplica(int x, int y) {
+    int produto;
+    produto = x * y;
+    return produto;
+}
+
+def Maior(int a, int b) {
+    int m;
+    if(a > b) {
+        m = a;
+    } else {
+        m = b;
+    }
+    return m;
+}
+
+def ImprimeResultado(int valor) {
+    print valor;
+}
+
+def Main() {
+    int x, y, z, w;
+    x = 5;
+    y = 10;
+    z = Soma(x, y);
+    w = Multiplica(z, x);
+    ImprimeResultado(w);
+    if(w >= 100) {
+        print z;
+    } else {
+        print y;
+    }
+    z = Maior(x, y);
+    print z;
 }
