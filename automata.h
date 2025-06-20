@@ -68,6 +68,11 @@ enum Tag
     UNK,
     EOF_TOKEN
 };
+enum TokenType
+{
+    KEYWORD,
+    SYMBOL
+};
 
 const vector<Tag> TERMINAIS = {
     RELOP, ARITHOP, IF, ELSE, DEF, PRINT, RETURN, INT,

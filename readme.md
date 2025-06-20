@@ -1,18 +1,8 @@
-# Analisador Léxico - Parte A
+# Trabalho Compiladores Parte 1
 
-## Descrição
+## Analisador Léxico - Parte A
 
-Este projeto implementa a Parte A do trabalho de Analisadores Léxicos: um lexer manual baseado em **autômatos de transição** para reconhecer:
-
-- **Identificadores**: letras seguidas de letras ou dígitos.
-- **Constantes Numéricas Inteiras**: sequência de dígitos decimais.
-- **Operadores Relacionais**: `<`, `>`, `=`, `<=`, `>=`, `!=`.
-
-Também é feita a distinção de **palavras-chave** (`def`, `int`, `if`, `else`, `print`, `return`) através de uma **tabela de símbolos**.
-
----
-
-## Estrutura dos arquivos
+### Estrutura dos arquivos
 
 - `automata.h` → Definição dos autômatos.
 - `automata.cpp` → Implementação dos autômatos de transição.
@@ -23,11 +13,23 @@ Também é feita a distinção de **palavras-chave** (`def`, `int`, `if`, `else`
 
 ---
 
-## Como compilar
+### Como compilar
 
 No terminal Linux, compile usando:
 
 ```bash
 g++ main.cpp automata.cpp
-./main <path_do_arquivo>
+./main entrada_valida.txt
+```
+
+## Analisador Léxico Flex - Parte B
+
+### Como compilar
+
+No terminal Linux, compile usando:
+
+```bash
+flex lexer.l
+gcc lex.yy.c -o lexer -lfl
+./lexer entrada_valida.txt
 ```

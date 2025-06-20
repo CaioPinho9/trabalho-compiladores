@@ -1,9 +1,21 @@
-def main() { 
-    int a = 5; 
+def Main() { 
+    int a, b, c;
+    a = 5; 
     if (a < 10) { 
         print(a + 1); 
     } else { 
         print(0); 
     } 
-    return 0; 
+    b = 2 + 3;
+    c = Sum(a, b);
+
+    print(c);
+
+    return; 
+}
+
+def Sum(int a, int b) {
+    int c;
+    c = a + b;
+    return c;
 }
