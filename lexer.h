@@ -1,3 +1,20 @@
+/*
+ * Trabalho de Compiladores - Analisador Léxico
+ * Parte A: Lexer baseado em Autômatos de Transição
+ *
+ * Autor: Caio Broering Pinho
+ * Sistema: GNU/Linux
+ * Linguagem: C++17
+ * Compilador: g++ versão 13.3.0
+ *
+ * Descrição:
+ * Este arquivo faz parte da implementação de um analisador léxico que reconhece
+ * identificadores, constantes numéricas inteiras e operadores relacionais,
+ * utilizando diagramas de transição (autômatos).
+ *
+ * Data: Abril de 2025
+ */
+
 #ifndef LEXER_H
 #define LEXER_H
 

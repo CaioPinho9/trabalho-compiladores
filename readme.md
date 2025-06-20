@@ -1,4 +1,4 @@
-# Trabalho Compiladores Parte 1
+# Trabalho Compiladores Parte 3
 
 ## Analisador Léxico - Parte A
 
@@ -6,9 +6,17 @@
 
 - `automata.h` → Definição dos autômatos.
 - `automata.cpp` → Implementação dos autômatos de transição.
-- `main.cpp` → Implementação do analisador léxico (lexer manual).
+- `lexer.cpp` → Implementação do analisador léxico (lexer manual).
+- `lexer.h` → Definição das funções e estruturas do analisador léxico.
+
+## Analisador Sintáico - Parte C
+
+### Estrutura dos arquivos
+
+- `parser.cpp` → Implementação do parser sintático.
 - `entrada_valida.txt` → Exemplo de entrada correta (sem erros).
-- `entrada_invalida.txt` → Exemplo de entrada com erro léxico.
+- `entrada_invalida1.txt` → Exemplo de entrada com erro sintático, não pode funções dentro de funções.
+- `entrada_invalida2.txt` → Exemplo de entrada com erro sintático, não pode else if.
 - `README.md` → Este arquivo de instruções.
 
 ---
@@ -18,8 +26,8 @@
 No terminal Linux, compile usando:
 
 ```bash
-g++ main.cpp automata.cpp
-./main entrada_valida.txt
+g++ parser.cpp lexer.cpp automata.cpp
+./a.out entrada_valida.txt
 ```
 
 ## Analisador Léxico Flex - Parte B

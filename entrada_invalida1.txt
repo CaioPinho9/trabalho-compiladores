@@ -1,9 +1,17 @@
 def Main() { 
-    int a = 5;
+    int a;
+    a = 5;
     if (a < 10) { 
         print(a + 1); 
     } else { 
         print(0); 
-    } }
-    return 0; 
+    }
+
+    def Soma(int a, b) {
+        int c;
+        c = a + b;
+        return c;
+    }
+
+    return; 
 }

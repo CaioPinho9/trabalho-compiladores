@@ -1,3 +1,19 @@
+/*
+ * Trabalho de Compiladores - Analisador Sintático
+ * Parte C: Parser LL(1) com Tabela de Análise
+ *
+ * Autor: Caio Broering Pinho
+ * Sistema: GNU/Linux
+ * Linguagem: C++17
+ * Compilador: g++ versão 13.3.0
+ *
+ * Descrição:
+ * Este arquivo implementa um parser LL(1) que utiliza uma tabela de análise para processar
+ * a gramática definida.
+ *
+ * Data: Junho de 2025
+ */
+
 #include <string>
 #include "automata.h"
 #include "lexer.h"
@@ -40,36 +56,6 @@ enum NonTerminals
     NT_TERM_ = 26,
     NT_FACTOR = 27
 };
-
-std::unordered_map<NonTerminals, std::string> NON_TERMINAL_TO_STRING = {
-    {NT_S, "S"},
-    {NT_MAIN, "MAIN"},
-    {NT_FLIST, "FLIST"},
-    {NT_FLIST_, "FLIST_"},
-    {NT_FDEF, "FDEF"},
-    {NT_PARLIST, "PARLIST"},
-    {NT_PARLIST_, "PARLIST_"},
-    {NT_VARLIST, "VARLIST"},
-    {NT_VARLIST_, "VARLIST_"},
-    {NT_STMT, "STMT"},
-    {NT_ATRIBST, "ATRIBST"},
-    {NT_ATRIBST_, "ATRIBST_"},
-    {NT_FCALL, "FCALL"},
-    {NT_PARLISTCALL, "PARLISTCALL"},
-    {NT_PARLISTCALL_, "PARLISTCALL_"},
-    {NT_PRINTST, "PRINTST"},
-    {NT_RETURNST, "RETURNST"},
-    {NT_RETURNST_, "RETURNST_"},
-    {NT_IFSTMT, "IFSTMT"},
-    {NT_IFSTMT_, "IFSTMT_"},
-    {NT_STMTLIST, "STMTLIST"},
-    {NT_EXPR, "EXPR"},
-    {NT_EXPR_, "EXPR_"},
-    {NT_NUMEXPR, "NUMEXPR"},
-    {NT_NUMEXPR_, "NUMEXPR_"},
-    {NT_TERM, "TERM"},
-    {NT_TERM_, "TERM_"},
-    {NT_FACTOR, "FACTOR"}};
 
 enum Productions
 {
@@ -163,6 +149,7 @@ enum Productions
 Productions ll1_table[NUM_NONTERMINALS][NUM_TERMINALS];
 using Symbol = variant<Tag, NonTerminals>;
 
+// Define quais tokens uma producao tem
 std::unordered_map<Productions, std::vector<Symbol>> productionsMap = {
     {PROD_S_0, {NonTerminals::NT_MAIN, Tag::EOF_TOKEN}}, // S ::= MAIN $
 
@@ -244,6 +231,38 @@ std::unordered_map<Productions, std::vector<Symbol>> productionsMap = {
     {PROD_FACTOR_NUM, {Tag::NUM}},                                               // FACTOR ::= num
 };
 
+// Mapeia os não-terminais para strings de debug
+std::unordered_map<NonTerminals, std::string> NON_TERMINAL_TO_STRING = {
+    {NT_S, "S"},
+    {NT_MAIN, "MAIN"},
+    {NT_FLIST, "FLIST"},
+    {NT_FLIST_, "FLIST_"},
+    {NT_FDEF, "FDEF"},
+    {NT_PARLIST, "PARLIST"},
+    {NT_PARLIST_, "PARLIST_"},
+    {NT_VARLIST, "VARLIST"},
+    {NT_VARLIST_, "VARLIST_"},
+    {NT_STMT, "STMT"},
+    {NT_ATRIBST, "ATRIBST"},
+    {NT_ATRIBST_, "ATRIBST_"},
+    {NT_FCALL, "FCALL"},
+    {NT_PARLISTCALL, "PARLISTCALL"},
+    {NT_PARLISTCALL_, "PARLISTCALL_"},
+    {NT_PRINTST, "PRINTST"},
+    {NT_RETURNST, "RETURNST"},
+    {NT_RETURNST_, "RETURNST_"},
+    {NT_IFSTMT, "IFSTMT"},
+    {NT_IFSTMT_, "IFSTMT_"},
+    {NT_STMTLIST, "STMTLIST"},
+    {NT_EXPR, "EXPR"},
+    {NT_EXPR_, "EXPR_"},
+    {NT_NUMEXPR, "NUMEXPR"},
+    {NT_NUMEXPR_, "NUMEXPR_"},
+    {NT_TERM, "TERM"},
+    {NT_TERM_, "TERM_"},
+    {NT_FACTOR, "FACTOR"}};
+
+// Mapeia as produções para strings de debug
 std::unordered_map<Productions, std::string> PRODUCTIONS_TO_STRING = {
     {PROD_S_0, "S ::= MAIN $"},
     {PROD_MAIN_EPSILON, "MAIN ::= ε"},
@@ -303,6 +322,7 @@ std::unordered_map<Productions, std::string> PRODUCTIONS_TO_STRING = {
     {PROD_FACTOR_ID, "FACTOR ::= id"},
     {PROD_FACTOR_NUM, "FACTOR ::= num"}};
 
+// Cria a tabela LL(1) para a gramática
 void initialize_ll1_table()
 {
     // S
@@ -492,6 +512,27 @@ inline Productions get_matrix(const NonTerminals &nt, const Tag &t)
     return ll1_table[nt][t];
 }
 
+inline void print_stack(const std::stack<Symbol> &parseStack)
+{
+    cout << "Stack now: ";
+    stack<Symbol> tmp = parseStack;
+    vector<string> items;
+    while (!tmp.empty())
+    {
+        const Symbol &s = tmp.top();
+        if (std::holds_alternative<Tag>(s))
+            items.push_back(TAG_TO_STRING.at(std::get<Tag>(s)));
+        else
+            items.push_back(NON_TERMINAL_TO_STRING.at(std::get<NonTerminals>(s)));
+        tmp.pop();
+    }
+    reverse(items.begin(), items.end());
+    for (const auto &s : items)
+        cout << s << " ";
+    cout << "\n==================\n"
+         << endl;
+}
+
 int main(int argc, char *argv[])
 {
     initialize_ll1_table();
@@ -558,15 +599,18 @@ int main(int argc, char *argv[])
             Productions prod = get_matrix(std::get<NonTerminals>(currentSymbol), tag);
             vector<Symbol> production = productionsMap[prod];
 
-            // Print detailed debug info
+            parseStack.pop();
+
+            for (auto it = production.rbegin(); it != production.rend(); ++it)
+            {
+                parseStack.push(*it);
+            }
+
             cout << "\n=== Debug Info ===" << endl;
             cout << "Top of stack (Non-terminal): " << NON_TERMINAL_TO_STRING[std::get<NonTerminals>(currentSymbol)] << endl;
             cout << "Current input token: " << token->toString() << " ( " << token->lexeme << " )" << endl;
             cout << "Applying production: " << PRODUCTIONS_TO_STRING[prod] << endl;
 
-            parseStack.pop();
-
-            // Show production symbols being pushed (if any)
             if (!production.empty())
             {
                 cout << "Pushing to stack (rightmost first): ";
@@ -584,30 +628,7 @@ int main(int argc, char *argv[])
                 cout << "Production is epsilon (no symbols pushed)." << endl;
             }
 
-            // Push production symbols in reverse order
-            for (auto it = production.rbegin(); it != production.rend(); ++it)
-            {
-                parseStack.push(*it);
-            }
-
-            // Print current stack state (top to bottom)
-            cout << "Stack now: ";
-            stack<Symbol> tmp = parseStack;
-            vector<string> items;
-            while (!tmp.empty())
-            {
-                const Symbol &s = tmp.top();
-                if (std::holds_alternative<Tag>(s))
-                    items.push_back(TAG_TO_STRING.at(std::get<Tag>(s)));
-                else
-                    items.push_back(NON_TERMINAL_TO_STRING.at(std::get<NonTerminals>(s)));
-                tmp.pop();
-            }
-            reverse(items.begin(), items.end());
-            for (const auto &s : items)
-                cout << s << " ";
-            cout << "\n==================\n"
-                 << endl;
+            print_stack(parseStack);
         }
         currentSymbol = parseStack.top();
     }
