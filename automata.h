@@ -62,10 +62,50 @@ enum Tag
     LT,
     GT,
     ASSIGN,
+    IDFUN,
     ID,
     NUM,
-    UNK
+    UNK,
+    EOF_TOKEN
 };
+
+const vector<Tag> TERMINAIS = {
+    RELOP, ARITHOP, IF, ELSE, DEF, PRINT, RETURN, INT,
+    PLUS, MINUS, TIMES, DIVIDE, LPAREN, RPAREN,
+    LBRACE, RBRACE, COMMA, SEMICOLON,
+    LE, GE, NE, EQ, LT, GT, ASSIGN, IDFUN, ID, NUM};
+
+const unordered_map<Tag, string> TAG_TO_STRING = {
+    {RELOP, "RELOP"},
+    {ARITHOP, "ARITHOP"},
+    {IF, "IF"},
+    {ELSE, "ELSE"},
+    {DEF, "DEF"},
+    {PRINT, "PRINT"},
+    {RETURN, "RETURN"},
+    {INT, "INT"},
+    {PLUS, "PLUS"},
+    {MINUS, "MINUS"},
+    {TIMES, "TIMES"},
+    {DIVIDE, "DIVIDE"},
+    {LPAREN, "LPAREN"},
+    {RPAREN, "RPAREN"},
+    {LBRACE, "LBRACE"},
+    {RBRACE, "RBRACE"},
+    {COMMA, "COMMA"},
+    {SEMICOLON, "SEMICOLON"},
+    {LE, "LE"},
+    {GE, "GE"},
+    {NE, "NE"},
+    {EQ, "EQ"},
+    {LT, "LT"},
+    {GT, "GT"},
+    {ASSIGN, "ASSIGN"},
+    {IDFUN, "IDFUN"},
+    {ID, "ID"},
+    {NUM, "NUM"},
+    {UNK, "UNK"},
+    {EOF_TOKEN, "$"}};
 
 // ==========================
 // Definição dos autômatos
@@ -166,6 +206,35 @@ const Automata automata_id = []
     {
         a.input_symbol_index[c] = idx;
         a.transition_table[0][idx] = 1;
+        a.transition_table[1][idx++] = 1;
+    }
+    for (char c = '0'; c <= '9'; ++c)
+    {
+        a.input_symbol_index[c] = idx;
+        a.transition_table[1][idx++] = 1;
+    }
+
+    a.final_states = {1};
+    return a;
+}();
+
+// idfun
+const Automata automata_idfun = []
+{
+    Automata a(2, 62); // 26 letras minúsculas + 26 maiúsculas + 10 dígitos
+    int idx = 0;
+
+    // Only uppercase letters allowed as first character
+    for (char c = 'A'; c <= 'Z'; ++c)
+    {
+        a.input_symbol_index[c] = idx;
+        a.transition_table[0][idx] = 1;   // state 0 -> 1 on uppercase
+        a.transition_table[1][idx++] = 1; // state 1 loops on uppercase
+    }
+    // Lowercase and digits allowed only after first character
+    for (char c = 'a'; c <= 'z'; ++c)
+    {
+        a.input_symbol_index[c] = idx;
         a.transition_table[1][idx++] = 1;
     }
     for (char c = '0'; c <= '9'; ++c)
@@ -372,6 +441,16 @@ const Automata automata_semicolon = []
     return a;
 }();
 
+// EOF
+const Automata automata_eof = []
+{
+    Automata a(2, 1);
+    a.input_symbol_index = {{'$', 0}};
+    a.transition_table[0][0] = 1;
+    a.final_states = {1};
+    return a;
+}();
+
 // ==========================
 // Vetor de mapeamento do automato com a TAG
 // ==========================
@@ -383,6 +462,7 @@ const unordered_map<Tag, Automata> automatas = {
     {ELSE, automata_else},
     {PRINT, automata_print},
     {RETURN, automata_return},
+    {IDFUN, automata_idfun},
     {ID, automata_id},
     {NUM, automata_num},
     {PLUS, automata_plus},
@@ -401,7 +481,8 @@ const unordered_map<Tag, Automata> automatas = {
     {LBRACE, automata_lbrace},
     {RBRACE, automata_rbrace},
     {COMMA, automata_comma},
-    {SEMICOLON, automata_semicolon}};
+    {SEMICOLON, automata_semicolon},
+    {EOF_TOKEN, automata_eof}};
 
 bool run_automata(const string &input, const Automata &automata);
 
